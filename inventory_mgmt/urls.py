@@ -19,9 +19,11 @@ from django.urls import path, include
 
 from users import urls as user_urls
 from vendordetails import urls as vendor_urls
+from stocks import urls as stock_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include(user_urls)),
-    path('vendor_urls/', include(vendor_urls))
+    path('vendor/', include(vendor_urls)),
+    path('stocks/', include(stock_urls))
 ]

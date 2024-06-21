@@ -40,8 +40,9 @@ INSTALLED_APPS = [
 
 
     # Apps
-    'users'
-    'vendordetails'
+    'users',
+    'vendordetails',
+    'stocks',
 ]
 
 

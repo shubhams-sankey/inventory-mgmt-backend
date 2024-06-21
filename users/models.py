@@ -1,7 +1,7 @@
 import uuid
 
 from django.db import models
-from datetime import datetime
+from django.utils import timezone
 
 # Create your models here.
 class UserTable(models.Model):
@@ -13,7 +13,7 @@ class UserTable(models.Model):
     email = models.CharField(max_length=255, unique=True)
     phno = models.IntegerField(null=True)
     pincode = models.IntegerField()
-    created_at = models.DateField(default=datetime.now())
+    created_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
         db_table = "user_table"

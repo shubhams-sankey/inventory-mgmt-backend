@@ -4,6 +4,8 @@ from django.urls import path
 from vendordetails import views
 
 urlpatterns = [
-    path("register", views.registerNewUser),
-    path("login", views.loginUser)
+    path("register", views.registerVendor),
+    path("login", views.loginVendor),
+    path("create-inventory", views.createInventory),
+    path('get-order-details', views.getOrderDetails)
 ]
