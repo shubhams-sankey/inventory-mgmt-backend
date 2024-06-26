@@ -9,6 +9,8 @@ from django.db.models import Subquery, OuterRef, F
 from kafka import KafkaConsumer
 
 from .models import *
+from users.models import UserTable
+from stocks.models import StockDetails
 
 @api_view(['POST'])
 def registerVendor(req):
@@ -168,9 +170,35 @@ def getOrderDetails(req):
                     # print ("%s:%d:%d: key=%s value=%s" % (cmessage.topic, cmessage.partition, cmessage.offset, cmessage.key, cmessage.value.decode('utf-8')))
                     
                     resmessage = cmessage.value.decode('utf-8')
+                    print("resmessage ====> ", type(resmessage))
+
+                    resmessage = json.loads(resmessage)
+
                     # print("Message ===>  ", resmessage)
+                    data = {}
+                    if resmessage['purchased_userid'] and resmessage['stock_id']:
+
+                        userdetails = UserTable.objects.filter(userid=resmessage['purchased_userid']).values("firstname", "lastname", "pincode")[:1]
+                        print(userdetails);
+
+                        stockdetails = StockDetails.objects.filter(stock_id=resmessage['stock_id']).values("stock_title", "stock_price")[:1]
+                        print(stockdetails);
+
+                        data = {
+                            "purchased_id": resmessage["purchased_id"],
+                            "user_name": userdetails[0]["firstname"] + " " + userdetails[0]["lastname"],
+                            "stock_name": stockdetails[0]["stock_title"],
+                            "stock_price": stockdetails[0]["stock_price"],
+                            "quantity_ordered": resmessage["quantity_ordered"],
+                            "payment_type": resmessage["payment_type"]
+                        }
+
+                        data = json.dumps(data)
+
+                        print("data ====> ", type(data))
+
                     
-                    yield f"data: {resmessage}\n\n"
+                    yield f"data: {data}\n\n"
 
  
                 # yield message 
